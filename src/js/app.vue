@@ -22,7 +22,7 @@ export default {
     data:function(){
         return {
 
-        updated_at:'190806',
+        updated_at:'191209',
         //modal
         modal_id:'modal_devil_info',
         //builder
@@ -485,6 +485,8 @@ export default {
                     boms = boms.concat(option.boms);
                 });
 
+                boms = boms.filter( x => x.auto );
+
                 boms.sort( (bom1, bom2) => {
                     let cost1 = type ? bom1.getCost(rarity) : bom1.getCostPure(rarity);
                     let cost2 = type ? bom2.getCost(rarity) : bom2.getCostPure(rarity);
@@ -494,7 +496,7 @@ export default {
                 if(boms.length>0){
                     bom.set(boms[0]);
                 }
-
+                
                 if(type==1){
                     //雜體
                     //var type1 = bom.pure_child == 1 ? 0 : 1;
@@ -503,11 +505,15 @@ export default {
                     type2=0; //TODO
                     this.auto_costdown(bom.child1, rarity, type1);
                     this.auto_costdown(bom.child2, rarity, type2);
+                    this.auto_costdown(bom.child3, rarity, type2);
+                    this.auto_costdown(bom.child4, rarity, type2);
                 }
                 else{
                     //純素體
                     this.auto_costdown(bom.child1, rarity, type);
                     this.auto_costdown(bom.child2, rarity, type);
+                    this.auto_costdown(bom.child3, rarity, type);
+                    this.auto_costdown(bom.child4, rarity, type);
                 }
             }
         }
@@ -532,7 +538,7 @@ export default {
             <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
             <b-navbar-brand href="#" @click="route('home')" class="d-none d-md-block">Dx2</b-navbar-brand>
             <b-navbar-brand href="#" @click="searchBar=!searchBar" class="d-block d-md-none">{{ $t('message.search') }}</b-navbar-brand>
-
+            
             <b-collapse is-nav id="nav_collapse">
                 <b-navbar-nav>
                     <b-nav-item href="#" @click="route('fusion.devil')" :active="isRoute('fusion.devil')">{{ $t('message.devil') }}</b-nav-item>
@@ -596,7 +602,7 @@ export default {
                                     </b-list-group-item>
 
                                     <b-list-group-item class="p-2">
-                                        <devil-bom-builder :bom="builder_target" :parent_bom="null" usage="builder" @listen="listen"></devil-bom-builder>
+                                        <devil-bom-builder :bom="builder_target" :parent_bom="null" usage="builder" @listen="listen" source=""></devil-bom-builder>
                                     </b-list-group-item>
 
                                     <b-list-group-item class="p-0" v-if="builder_options.length">
@@ -768,25 +774,27 @@ export default {
     </div>
     
     <!-- footer -->
-    <div class="container-fluid mw-1920 mb-3">
+    <div class="container-fluid mw-1920">
         <div class="d-flex">
-            
             <div class="mr-1 flex-grow-1">
                 <img v-for="(orb,index) in orbs.filter(x=>x.state)" :key="index" :src="orb.icon" style="width:30px">
             </div>
-
-            <div class="mx-1 p-1">
-                <span class="small">Version: {{ updated_at }}</span>
-            </div>  
             <div class="mx-1">
-                <a href="https://extradition.g0vhk.io/index-en.html" target="_blank">
-                    <img src="images/theme/Bauhinia-32px.png" title="Hong Kong Anti Extradition Bill">
+                <a href="https://tl.hkrev.info/en/police-timeline/" target="_blank">
+                    <img src="images/theme/hkdm-32px.png" title="Hong Kong Democratic Movement">
                 </a>
             </div>
             <div class="ml-1">
                 <a href="https://github.com/oceanxdds/dx2_fusion" target="_blank">
                     <img src="images/theme/GitHub-Mark-32px.png" alt="GitHub">
                 </a>
+            </div>  
+        </div>
+    </div>
+    <div class="container-fluid mw-1920 mb-3">
+        <div class="d-flex justify-content-end">
+            <div class="p-1">
+                <span class="small">Version: {{ updated_at }}</span>
             </div>  
         </div>
     </div>
